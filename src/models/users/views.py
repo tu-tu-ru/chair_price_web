@@ -1,13 +1,25 @@
 # About the blueprint
 
-from flask import Blueprint
+from flask import Blueprint, request, session, url_for, render_template
+from werkzeug.utils import redirect
+
+from src.models.users.user import User
 
 user_blueprint = Blueprint('users', __name__)
 
 
-@user_blueprint.route('/login')
+@user_blueprint.route('/login', methods=['POST', 'GET'])
 def login_user():
-    pass
+    # 两种不同的 methods 对应不同的动作
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['hashed']  # Hashed pw from user input form
+
+        if User.is_login_valid(email, password):
+            session['email'] = email
+            return redirect(url_for(".user_alerts"))
+    else:
+        return render_template('users/login.html')
 
 
 @user_blueprint.route('/register')

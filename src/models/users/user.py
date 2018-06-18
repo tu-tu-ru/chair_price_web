@@ -1,6 +1,8 @@
 import uuid
 
 from src.common.database import Database
+from src.common.utils import Utils
+import src.models.users.errors as UserErrors
 
 
 class User:
@@ -12,7 +14,6 @@ class User:
     def __repr__(self):
         return "<User {}>".format(self.email)
 
-
     @staticmethod
     def is_login_valid(email, password):
         """
@@ -21,13 +22,14 @@ class User:
         :param password: A (sha25) hashed password
         :return: True if valid, otherwise False
         """
-        user_data = Database.find_one(collection="users", query={"email":email})
+        user_data = Database.find_one(collection="users", query={"email": email})
+        # The pw contained in user_data is already hashed to pbkdf2_sha512
 
         if user_data is None:
             # This user does not exist
-            pass
-        if Utils.check_hashed_passowrd(password, user_data["password"]) is not True:
+            raise UserErrors.UserNotExistError("This user does not exist.")
+        if Utils.check_hashed_password(password, user_data["password"]) is not True:
             # Tell the user the pw is not correct
-            pass
+            raise UserErrors.IncorrectPasswordError("Your pw is not correct.")
 
         return True
