@@ -29,7 +29,7 @@ def register_user():
 
 @user_blueprint.route('/alerts')
 def user_alerts():
-    pass
+    return "This is an alert page."
 
 
 @user_blueprint.route('/logout')
