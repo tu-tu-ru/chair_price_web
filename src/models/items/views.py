@@ -7,7 +7,7 @@ item_blueprint = Blueprint('items', __name__)
 def item_page():
     pass
 
-
+# remove load_an_item
 @item_blueprint.route('/load')
 def load_an_item():
     """
