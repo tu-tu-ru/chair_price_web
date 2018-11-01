@@ -30,7 +30,7 @@ class Store:
         return cls(**Database.find_one(StoreConstants.COLLECTION, {"_id": id}))
 
     def save_to_mongo(self):
-        #Database.update(StoreConstants.COLLECTION, {"_id": self._id}, self.json())
+        # Database.update(StoreConstants.COLLECTION, {"_id": self._id}, self.json())
         Database.insert(StoreConstants.COLLECTION, self.json())
 
     @classmethod
@@ -39,6 +39,10 @@ class Store:
 
     @classmethod
     def get_store_by_url_prefix(cls, store_prefix):
+        """
+        :param store_prefix:
+        :return: A store object
+        """
         # parse the url prefix with RegEx
         return cls(**Database.find_one(StoreConstants.COLLECTION, {"url_prefix": {"$regex": '^{}'.format(store_prefix)}}))
 
@@ -49,10 +53,10 @@ class Store:
         :param url: item's url
         :return: a store, or StoreNotFoundError if no store matches the url
         """
-        try:
-            for i in range(len(url)+1):
+        for i in range(len(url) + 1):
+            try:
                 store = cls.get_store_by_url_prefix(url[:i])
                 return store
                 # If such a store cannot be found, throw an exception
-        except:
-            raise StoreErrors.StoreNotFoundError("Store cannot be found with the given item url.")
+            except:
+                raise StoreErrors.StoreNotFoundError("Store cannot be found with the given item url.")
