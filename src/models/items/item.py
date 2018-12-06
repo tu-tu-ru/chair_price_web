@@ -5,16 +5,17 @@ from bs4 import BeautifulSoup
 import re
 import src.models.items.constants as ItemConstants
 from src.common.database import Database
+#import src.models.stores.store as Store
 from src.models.stores.store import Store
 
 
 class Item:
-    def __init__(self, name, url, price=None,_id=None):
+    def __init__(self, name, url, price=None, _id=None):
         self.name = name
         self.url = url
-        store = Store.find_store_by_url(url)
-        self.tag_name = store.tag_name
-        self.query = store.query
+        corresponding_store = Store.find_store_by_url(url)
+        self.tag_name = corresponding_store.tag_name
+        self.query = corresponding_store.query
         #self.price = self.load_item(tag_name, query)
         self.price = None if price is None else price
         self._id = uuid.uuid4().hex if _id is None else _id
@@ -63,6 +64,3 @@ class Item:
             "_id": self._id
         }
 
-
-    def get_item_by_id(item_id):
-        return None

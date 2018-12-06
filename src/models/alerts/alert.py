@@ -57,10 +57,10 @@ class Alert:
         return {
             "_id": self._id,
             "price_limit": self.price_limit,
-            "last_checked": self.last_checked,
+            "last_checked": self.last_check,
             "user_email": self.user_email,
             "item_id": self.item._id,
-            "active": self.active
+            #"active": self.active
         }
 
     def load_item_price(self):

@@ -14,7 +14,7 @@ class Store:
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def __repr__(self):
-        return "<Store {}>".format(self.name)
+        return "<sto {}>".format(self.name)
 
     def json(self):
         return {
@@ -53,10 +53,9 @@ class Store:
         :param url: item's url
         :return: a store, or StoreNotFoundError if no store matches the url
         """
-        for i in range(len(url) + 1):
+        for i in range(0, len(url)+1):
             try:
                 store = cls.get_store_by_url_prefix(url[:i])
                 return store
-                # If such a store cannot be found, throw an exception
             except:
-                raise StoreErrors.StoreNotFoundError("Store cannot be found with the given item url.")
+                raise StoreErrors.StoreNotFoundError("The URL Prefix used to find the store didn't give us any results!")

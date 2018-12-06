@@ -41,7 +41,7 @@ def register_user():
         except UserErrors as e:
             return e.message
 
-        return render_template('users/register.html')
+        return render_template('users/register.jinja2')
 
 
 

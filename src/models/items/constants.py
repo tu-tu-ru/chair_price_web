@@ -1,1 +1,1 @@
-COLLECTION = "items"
+COLLECTION = "item"

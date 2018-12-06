@@ -1,1 +1,1 @@
-COLLECTION="stores"
+COLLECTION="store"
