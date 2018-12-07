@@ -4,7 +4,9 @@
     <div class="container">
         <h1 class="display-4">Price tracking service</h1>
         <p class="lead">To use this service, register as a user and prepare an item link for tracking.</p>
-        <p>Click <button type="button" class="btn btn-outline-dark" href="{{ url_for('users.register_user')}}">Here</button> to join.</p>
+        <p>Click register to join.</p>
+        <hr class="my-4">
+        <button type="button" class="btn btn-outline-dark" href="{{ url_for('users.register_user')}}">Register</button>
     </div>
 </div>
 {% endblock %}

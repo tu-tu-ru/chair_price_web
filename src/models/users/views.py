@@ -24,10 +24,10 @@ def login_user():
         except UserErrors as e:
             return e.message
 
-        return render_template('users/login.html')
+    return render_template("users/login.jinja2")
 
 
-@user_blueprint.route('/register',methods=['GET','POST'])
+@user_blueprint.route('/register', methods=['GET','POST'])
 def register_user():
     # If a user does not exist, register it and then log it in
     if request.method == 'POST':
@@ -41,18 +41,25 @@ def register_user():
         except UserErrors as e:
             return e.message
 
-        return render_template('users/register.jinja2')
-
+    return render_template('users/register.jinja2')
 
 
 @user_blueprint.route('/alerts')
 def user_alerts():
-    return "This is an alert page."
+    """
+    find user from the browser session, and find all the alerts with user's email
+    :return: render_template; for the `alerts=alerts` parameter, the former one is render_template()'s para,
+        the latter one is the alerts get from user
+    """
+    user = User.find_user_by_email(session['email'])
+    alerts = user.get_alert()
+    return render_template("users/alerts.jinja2", alerts=alerts)
 
 
 @user_blueprint.route('/logout')
 def logout_user():
-    pass
+    session['email'] = None
+    return redirect(url_for('home'))  # return the page back to Home; `'home'` is the home() function in app.py
 
 
 # Check all the alerts for specific user

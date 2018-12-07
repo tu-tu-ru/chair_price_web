@@ -3,6 +3,8 @@ import uuid
 from src.common.database import Database
 from src.common.utils import Utils
 import src.models.users.errors as UserErrors
+import src.models.users.constants as UserConstants
+from src.models.alerts.alert import Alert
 
 
 class User:
@@ -22,7 +24,7 @@ class User:
         :param password: A (sha25) hashed password
         :return: True if valid, otherwise False
         """
-        user_data = Database.find_one(collection="users", query={"email": email})
+        user_data = Database.find_one(collection=UserConstants.COLLECTION, query={"email": email})
         # The pw contained in user_data is already hashed to pbkdf2_sha512
 
         if user_data is None:
@@ -35,7 +37,7 @@ class User:
         return True
 
     @staticmethod
-    def register_user(email,password):
+    def register_user(email, password):
         """
         To register a user with email and hashed password.
         src.common.utils will do the hash work
@@ -44,7 +46,7 @@ class User:
         :return: True if register successfully, or False otherwise
         """
 
-        user_data = Database.find_one(collection="users", query={"email": email})
+        user_data = Database.find_one(collection=UserConstants.COLLECTION, query={"email": email})
 
         if user_data is not None:
             # Tell user they are already registered
@@ -69,3 +71,10 @@ class User:
             "email": self.email,
             "password": self.password
         }
+
+    @classmethod
+    def find_user_by_email(cls, email):
+        return cls(**Database.find_one(UserConstants.COLLECTION, {"email": email}))
+
+    def get_alert(self):
+        return Alert.find_alert_by_email(self.email)

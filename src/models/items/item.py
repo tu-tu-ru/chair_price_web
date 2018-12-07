@@ -26,6 +26,7 @@ class Item:
     @classmethod
     def get_item_by_id(cls, item_id):
         return cls(**Database.find_one(ItemConstants.COLLECTION, {"_id": item_id}))
+        # return cls(**Database.find_one(collection='items', query={"_id": item_id}))
 
     def load_price(self):
         """
@@ -37,7 +38,7 @@ class Item:
         request = requests.get(self.url)
         content = request.content
         soup = BeautifulSoup(content, "html.parser")
-        element = soup.find(self.tag_name,self.query)
+        element = soup.find(self.tag_name, self.query)
         string_price = element.text.strip()
 
         # Use RegEx to extract the numeric from `string_price`
@@ -54,7 +55,7 @@ class Item:
         To insert json to db
         :return:
         """
-        Database.insert(collection=ItemConstants.COLLECTION, data=self.json())
+        Database.update(collection=ItemConstants.COLLECTION, query={"_id": self._id}, data=self.json())
 
     def json(self):
         return {

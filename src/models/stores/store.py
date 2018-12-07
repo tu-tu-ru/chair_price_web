@@ -1,7 +1,7 @@
 import uuid
 
 from src.common.database import Database
-import src.models.stores.constants as StoreConstants
+import src.models.stores.constants as store_constants
 import src.models.stores.errors as StoreErrors
 
 
@@ -27,15 +27,15 @@ class Store:
 
     @classmethod
     def get_store_by_id(cls, id):
-        return cls(**Database.find_one(StoreConstants.COLLECTION, {"_id": id}))
+        return cls(**Database.find_one(store_constants.COLLECTION, {"_id": id}))
 
     def save_to_mongo(self):
-        # Database.update(StoreConstants.COLLECTION, {"_id": self._id}, self.json())
-        Database.insert(StoreConstants.COLLECTION, self.json())
+        # Database.update(store_constants.COLLECTION, {"_id": self._id}, self.json())
+        Database.insert('store', self.json())
 
     @classmethod
-    def get_store_by_name(cls,store_name):
-        return cls(**Database.find_one(StoreConstants.COLLECTION, {"name": store_name}))
+    def get_store_by_name(cls, store_name):
+        return cls(**Database.find_one(store_constants.COLLECTION, {"name": store_name}))
 
     @classmethod
     def get_store_by_url_prefix(cls, store_prefix):
@@ -44,7 +44,7 @@ class Store:
         :return: A store object
         """
         # parse the url prefix with RegEx
-        return cls(**Database.find_one(StoreConstants.COLLECTION, {"url_prefix": {"$regex": '^{}'.format(store_prefix)}}))
+        return cls(**Database.find_one(store_constants.COLLECTION, {"url_prefix": {"$regex": '^{}'.format(store_prefix)}}))
 
     @classmethod
     def find_store_by_url(cls, url):
